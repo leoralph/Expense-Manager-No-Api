@@ -22,18 +22,18 @@
 
 <script setup>
     import { api } from "src/boot/axios";
-import { useAppStore } from "src/stores/app";
+    import { useAppStore } from "src/stores/app";
     import { useAuthStore } from "src/stores/auth";
     import { useMessageStore } from "src/stores/message";
-    import { computed, ref } from "vue";
+    import { computed, ref, watch } from "vue";
 
     const authStore = useAuthStore();
     const appStore = useAppStore();
     const messageStore = useMessageStore();
 
     const user = ref({
-        name: authStore.user.name,
-        email: authStore.user.email,
+        name: authStore.user?.name || "",
+        email: authStore.user?.email || "",
         password: "",
         password_confirmation: "",
     });
@@ -61,4 +61,22 @@ import { useAppStore } from "src/stores/app";
             appStore.loading = false;
         }
     }
+
+    watch([show, () => authStore.logged], () => {
+        if (show.value && !authStore.logged) {
+            user.value = {
+                name: "",
+                email: "",
+                password: "",
+                password_confirmation: "",
+            };
+        } else if (show.value) {
+            user.value = {
+                name: authStore.user.name,
+                email: authStore.user.email,
+                password: "",
+                password_confirmation: "",
+            };
+        }
+    });
 </script>
