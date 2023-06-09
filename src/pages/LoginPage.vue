@@ -48,7 +48,7 @@
     import { api } from "src/boot/axios";
     import { useAppStore } from "src/stores/app";
     import { useAuthStore } from "src/stores/auth";
-    import { ref } from "vue";
+    import { onBeforeMount, ref } from "vue";
     import { useRouter } from "vue-router";
 
     const appStore = useAppStore();
@@ -79,4 +79,10 @@
             appStore.loading = false;
         }
     }
+
+    onBeforeMount(() => {
+        if (authStore.logged) {
+            router.push({ name: "home" });
+        }
+    });
 </script>
