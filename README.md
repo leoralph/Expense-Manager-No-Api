@@ -1,4 +1,4 @@
-# Expense Manager (expense-manage)
+# Expense Manager Frontend
 
 Guia de configuração:
 
