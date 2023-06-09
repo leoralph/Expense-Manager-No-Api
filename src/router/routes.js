@@ -1,8 +1,32 @@
+import MainLayout from "layouts/MainLayout.vue";
+import LoginPage from "pages/LoginPage.vue";
+import HomePage from "pages/HomePage.vue";
+import RegisterPage from "pages/RegisterPage.vue";
+
 const routes = [
     {
         path: "/",
-        component: () => import("layouts/MainLayout.vue"),
-        children: [{ path: "", component: () => import("pages/IndexPage.vue") }],
+        component: MainLayout,
+        children: [
+            {
+                path: "login",
+                name: "login",
+                component: LoginPage,
+            },
+            {
+                path: "register",
+                name: "register",
+                component: RegisterPage,
+            },
+            {
+                path: "",
+                name: "home",
+                meta: {
+                    requiresAuth: true,
+                },
+                component: HomePage,
+            },
+        ],
     },
 
     // Always leave this as last one,
