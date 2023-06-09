@@ -28,5 +28,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-.env.*
+.env*
 !.env.example
