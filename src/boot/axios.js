@@ -2,7 +2,6 @@ import { boot } from "quasar/wrappers";
 import axios from "axios";
 import { useAuthStore } from "src/stores/auth";
 import { useMessageStore } from "src/stores/message";
-import { useRouter } from "vue-router";
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -34,9 +33,7 @@ api.interceptors.response.use(
 
         if (error.response.status === 401) {
             const authStore = useAuthStore();
-            const router = useRouter();
             authStore.logout();
-            router.push({ name: "login" });
         }
 
         return Promise.reject(error);
