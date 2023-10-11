@@ -29,19 +29,19 @@ export default route(function (/* { store, ssrContext } */) {
         history: createHistory(process.env.VUE_ROUTER_BASE),
     });
 
-    Router.beforeEach(async (to, from, next) => {
-        const authStore = useAuthStore();
+    // Router.beforeEach(async (to, from, next) => {
+    //     const authStore = useAuthStore();
 
-        let redirect;
+    //     let redirect;
 
-        if (!authStore.loadedUser) await authStore.loadUser();
+    //     if (!authStore.loadedUser) await authStore.loadUser();
 
-        if (to.meta.requiresAuth && !authStore.logged) {
-            redirect = "/login";
-        }
+    //     if (to.meta.requiresAuth && !authStore.logged) {
+    //         redirect = "/login";
+    //     }
 
-        next(redirect);
-    });
+    //     next(redirect);
+    // });
 
     return Router;
 });

@@ -1,7 +1,6 @@
 <template>
     <q-table
         ref="expenseTable"
-        v-model:pagination="pagination"
         :rows="expenses"
         :columns="columns"
         :loading="loading"
@@ -87,23 +86,14 @@
         loading.value = true;
 
         try {
-            const response = await api.get("expense", {
-                params: {
-                    page: props.pagination.page,
-                    per_page: props.pagination.rowsPerPage,
-                    sort_by: props.pagination.sortBy,
-                    sort_direction: props.pagination.descending ? "desc" : "asc",
-                    search: filter.value,
-                },
-            });
+            const localExpenses = localStorage.getItem("expenses");
 
-            expenses.value = response.data.data;
-
-            pagination.value.page = response.data.meta.current_page;
-            pagination.value.rowsNumber = response.data.meta.total;
-            pagination.value.rowsPerPage = response.data.meta.per_page;
-            pagination.value.sortBy = props.pagination.sortBy;
-            pagination.value.descending = props.pagination.descending;
+            if (localExpenses) {
+                expenses.value = JSON.parse(localExpenses);
+            } else {
+                localStorage.setItem("expenses", JSON.stringify([]));
+                expenses.value = [];
+            }
         } finally {
             loading.value = false;
         }

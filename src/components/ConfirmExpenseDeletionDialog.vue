@@ -37,11 +37,16 @@
     async function confirm() {
         appStore.loading = true;
         try {
-            const response = await api.delete(`expense/${props.expense.id}`);
+            const expenses = JSON.parse(localStorage.getItem("expenses"));
+
+            localStorage.setItem(
+                "expenses",
+                JSON.stringify(expenses.filter(expense => expense.id !== props.expense.id))
+            );
 
             emit("expenseDeleted", props.expense);
 
-            messageStore.addMessage(response.data.message, "positive");
+            messageStore.addMessage("Despesa excluída com sucesso!", "positive");
 
             show.value = false;
         } finally {

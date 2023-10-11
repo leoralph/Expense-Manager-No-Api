@@ -52,7 +52,7 @@
             });
         },
         set(value) {
-            editableExpense.value.value = value.replace(/\D/g, "") / 100;
+            editableExpense.value.value = value.toString().replace(/\D/g, "") / 100;
         },
     });
 
@@ -60,19 +60,21 @@
         appStore.loading = true;
 
         try {
-            let response;
+            const currentExpenses = JSON.parse(localStorage.getItem("expenses"));
 
-            if (expenseId.value) {
-                response = await api.put(`expense/${expenseId.value}`, editableExpense.value);
+            if (expenseId.value !== null) {
+                currentExpenses[expenseId.value] = editableExpense.value;
             } else {
-                response = await api.post("expense", editableExpense.value);
+                currentExpenses.push({ ...editableExpense.value, id: currentExpenses.length });
             }
+
+            localStorage.setItem("expenses", JSON.stringify(currentExpenses));
 
             emit("expenseSaved");
 
             show.value = false;
 
-            messageStore.addMessage(response.data.message, "positive");
+            messageStore.addMessage("Despesa criada com sucesso", "positive");
         } finally {
             appStore.loading = false;
         }
@@ -85,6 +87,7 @@
             expenseId.value = props.expense.id;
 
             editableExpense.value = {
+                id: props.expense.id,
                 description: props.expense.description,
                 date: props.expense.date.split("/").reverse().join("-"),
             };
